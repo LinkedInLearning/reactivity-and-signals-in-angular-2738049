@@ -1,6 +1,11 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component } from '@angular/core';
 
+interface ShippingMethod {
+  name: string;
+  price: number;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
@@ -8,7 +13,7 @@ import { Component } from '@angular/core';
   imports: [CurrencyPipe]
 })
 export class App {
-  protected shippingMethods = [
+  protected shippingMethods: ShippingMethod[] = [
     {name: 'Standard Shipping', price: 5.00},
     {name: 'Speedy Shipping', price: 15.00},
     {name: 'Overnight Shipping', price: 25.00}
@@ -33,7 +38,7 @@ export class App {
     this.quantity++;
   }
 
-  updateShippingMethod(method: {name: string, price: number}) {
+  updateShippingMethod(method: ShippingMethod) {
     this.shippingMethod = method;
   }
 }
