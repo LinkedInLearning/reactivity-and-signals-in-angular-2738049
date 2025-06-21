@@ -1,0 +1,50 @@
+<h1>Shopping Cart</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Quantity</th>
+      <th>Price Each</th>
+      <th>Item Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ item.name }}</td>
+      <td>{{ quantity }}</td>
+      <td>{{ item.price | currency }}</td>
+      <td>{{ itemTotal | currency  }}</td>
+    </tr>
+    <tr>
+        <td colspan="3">Shipping Method</td>
+        <td>
+            <select>
+                @for(method of shippingMethods; track method) {
+                    <option (selected)="updateShippingMethod(method)">
+                        {{ method.name }} - {{ method.price | currency }}   
+                    </option>
+                }
+            </select>
+        </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+        <td colspan="3">Subtotal</td>
+        <td>{{ subtotal | currency  }}</td>
+    </tr>
+    <tr>
+      <td colspan="3">Tax</td>
+      <td>{{ tax | currency  }}</td>
+    </tr>
+    <tr>
+      <td colspan="3">Shipping</td>
+      <td>{{ shipping | currency  }}</td>
+    </tr>
+    <tr>
+      <td colspan="3">Total</td>
+      <td>{{ total | currency  }}</td>
+    </tr>
+  </tfoot>
+</table>
+<button (click)="addToCart()">Add Super Cool Item to Cart</button>
