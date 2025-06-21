@@ -18,13 +18,14 @@
     <tr>
         <td colspan="3">Shipping Method</td>
         <td>
-            <select>
-                @for(method of shippingMethods; track method) {
-                    <option (selected)="updateShippingMethod(method)">
-                        {{ method.name }} - {{ method.price | currency }}   
-                    </option>
-                }
-            </select>
+            <div class="shipping-methods">
+            @for(method of shippingMethods; let i = $index; track method) {
+                <div>
+                    <input type="radio" id="i" name="contact" value="email" (click)="updateShippingMethod(method)" [checked]="method === shippingMethod"/>
+                    <label for="i">{{ method.name}} -  {{method.price | currency}}</label>
+                </div>
+            }
+            </div>
         </td>
     </tr>
   </tbody>
