@@ -11,9 +11,9 @@
   <tbody>
     <tr>
       <td>{{ item.name }}</td>
-      <td>{{ quantity }}</td>
+      <td>{{ quantity() }}</td>
       <td>{{ item.price | currency }}</td>
-      <td>{{ itemTotal | currency  }}</td>
+      <td>{{ itemTotal() | currency  }}</td>
     </tr>
     <tr>
         <td colspan="3">Shipping Method</td>
@@ -21,7 +21,7 @@
             <div class="shipping-methods">
             @for(method of shippingMethods; let i = $index; track method) {
                 <div>
-                    <input type="radio" id="i" name="contact" value="email" (click)="updateShippingMethod(method)" [checked]="method === shippingMethod"/>
+                    <input type="radio" id="i" name="contact" value="email" (click)="updateShippingMethod(method)" [checked]="method === shippingMethod()"/>
                     <label for="i">{{ method.name}} -  {{method.price | currency}}</label>
                 </div>
             }
@@ -32,19 +32,19 @@
   <tfoot>
     <tr>
         <td colspan="3">Subtotal</td>
-        <td>{{ subtotal | currency  }}</td>
+        <td>{{ subtotal() | currency  }}</td>
     </tr>
     <tr>
       <td colspan="3">Tax</td>
-      <td>{{ tax | currency  }}</td>
+      <td>{{ tax() | currency  }}</td>
     </tr>
     <tr>
       <td colspan="3">Shipping</td>
-      <td>{{ shipping | currency  }}</td>
+      <td>{{ shipping() | currency  }}</td>
     </tr>
     <tr>
       <td colspan="3">Total</td>
-      <td>{{ total | currency  }}</td>
+      <td>{{ total() | currency  }}</td>
     </tr>
   </tfoot>
 </table>

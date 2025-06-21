@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
 interface ShippingMethod {
   name: string;
@@ -19,27 +19,31 @@ export class App {
     {name: 'Speedy Shipping', price: 15.00},
     {name: 'Overnight Shipping', price: 25.00}
   ];
-  protected shippingMethod = this.shippingMethods[0];
+  protected shippingMethod = signal<ShippingMethod>(this.shippingMethods[0]);
 
-  protected quantity = 1;
+  protected quantity = signal<number>(0);
   
   protected item = {
     name: 'Super Cool Item',
     price: 19.99
   };
 
-  protected itemTotal = +(this.quantity * this.item.price).toFixed(2);
-  protected subtotal = this.itemTotal;
-  protected tax = +(this.subtotal * 0.07).toFixed(2);
-  protected shipping = this.shippingMethod.price;
-  protected total = +(this.subtotal + this.tax + this.shipping).toFixed(2);
+  protected itemTotal = computed<number>(() => {
+    return +(this.quantity() * this.item.price).toFixed(2);
+  });
+  
+  
+  protected subtotal = computed(() => this.itemTotal());
+  protected tax = computed(() => +(this.subtotal() * 0.07).toFixed(2));
+  protected shipping = computed(() => this.shippingMethod()?.price || 0);
+  protected total = computed(() => +(this.subtotal() + this.tax() + this.shipping()).toFixed(2));
 
 
   addToCart() {
-    this.quantity++;
+    this.quantity.update(previous => previous + 1);
   }
 
   updateShippingMethod(method: ShippingMethod) {
-    this.shippingMethod = method;
+    this.shippingMethod.set(method);
   }
 }
