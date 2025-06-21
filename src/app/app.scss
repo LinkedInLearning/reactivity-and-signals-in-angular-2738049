@@ -26,3 +26,9 @@ button {
     margin: 20px;
     padding: 10px 20px;
 }
+
+.shipping-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
