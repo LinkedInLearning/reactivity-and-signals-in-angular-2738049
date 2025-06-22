@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@angular/core';
 
 interface ShippingMethod {
   name: string;
@@ -37,6 +37,12 @@ export class App {
   protected tax = computed(() => +(this.subtotal() * 0.07).toFixed(2));
   protected shipping = computed(() => this.shippingMethod()?.price || 0);
   protected total = computed(() => +(this.subtotal() + this.tax() + this.shipping()).toFixed(2));
+
+  constructor() {
+    effect(() => {
+      console.log(`Quantity: ${this.quantity()}`);
+    })
+  }
 
 
   addToCart() {
