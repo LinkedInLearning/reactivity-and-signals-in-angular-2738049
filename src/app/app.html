@@ -16,10 +16,15 @@
       <td>{{ itemTotal() | currency  }}</td>
     </tr>
     <tr>
-        <td colspan="3">Shipping Method</td>
+        <td colspan="3">
+            <p>Shipping Method</p>
+            @if(shippingMethod().hasPriceChange){
+                <p class="warning">Your shipping price has changed, please verify your selection</p>
+            }
+        </td>
         <td>
             <div class="shipping-methods">
-            @for(method of shippingMethods; let i = $index; track method) {
+            @for(method of shippingMethods(); let i = $index; track method) {
                 <div>
                     <input type="radio" id="i" name="contact" value="email" (click)="updateShippingMethod(method)" [checked]="method === shippingMethod()"/>
                     <label for="i">{{ method.name}} -  {{method.price | currency}}</label>
@@ -49,3 +54,4 @@
   </tfoot>
 </table>
 <button (click)="addToCart()">Add Super Cool Item to Cart</button>
+<button (click)="changeShippingOptions()">ADMIN ONLY! Change Shipping Options</button>
