@@ -1,11 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, linkedSignal, signal } from '@angular/core';
-
-interface ShippingMethod {
-  name: string;
-  price: number;
-  hasPriceChange?: boolean
-}
+import { ChangeDetectionStrategy, Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
+import { ShippingMethod } from './services/shipping-data';
+import { ShippingService } from './services/shipping';
 
 @Component({
   selector: 'app-root',
@@ -15,21 +11,22 @@ interface ShippingMethod {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
-  protected shippingMethods = signal([
-    {name: 'Standard Shipping', price: 5.00},
-    {name: 'Speedy Shipping', price: 15.00},
-    {name: 'Overnight Shipping', price: 25.00}
-  ]);
+  private readonly shippingService = inject(ShippingService);
+  readonly shippingMethods = this.shippingService.getShippingMethods();
+
   protected shippingMethod = linkedSignal<ShippingMethod[], ShippingMethod>({
     source: this.shippingMethods,
     computation: (newOptions, previous) => {
-      const selected = newOptions.find((opt) => opt.name === previous?.value.name);
-      if (selected && selected.price !== previous?.value.price) {
-        selected.hasPriceChange = true;
+      if(newOptions.length) {
+        const selected = newOptions.find((opt) => opt.name === previous?.value.name);
+        if (selected && selected.price !== previous?.value.price) {
+          selected.hasPriceChange = true;
+        }
+        return (
+          selected ?? newOptions[0]
+        );
       }
-      return (
-        selected ?? newOptions[0]
-      );
+      return { name: '', price: 0, hasPriceChange: false };
     },
   });
 
@@ -69,11 +66,6 @@ export class App {
   }
 
   changeShippingOptions() {
-    this.shippingMethods.set([
-      {name: 'Standard Shipping', price: 5.00},
-      {name: 'Quick Shipping', price: 10.00},
-      {name: 'Fast Shipping', price: 15.00},
-      {name: 'Overnight Shipping', price: 29.99},
-    ]);
+    this.shippingService.updateShippingMethodIndex();
   }
 }
