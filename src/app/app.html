@@ -18,17 +18,19 @@
     <tr>
         <td colspan="3">
             <p>Shipping Method</p>
-            @if(shippingMethod().hasPriceChange){
+            @if(shippingMethod() && shippingMethod().hasPriceChange){
                 <p class="warning">Your shipping price has changed, please verify your selection</p>
             }
         </td>
         <td>
             <div class="shipping-methods">
-            @for(method of shippingMethods(); let i = $index; track method) {
+            @for(method of shippingMethods(); let i = $index; track $index) {
                 <div>
                     <input type="radio" id="i" name="contact" value="email" (click)="updateShippingMethod(method)" [checked]="method === shippingMethod()"/>
                     <label for="i">{{ method.name}} -  {{method.price | currency}}</label>
                 </div>
+            } @empty {
+                <p>No shipping methods available</p>
             }
             </div>
         </td>
