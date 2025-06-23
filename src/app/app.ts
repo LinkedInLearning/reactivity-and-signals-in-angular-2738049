@@ -1,6 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
-import { ShippingMethod } from './services/shipping-data';
+import { ShippingMethod, Timezones } from './services/shipping-data';
 import { ShippingService } from './services/shipping';
 
 @Component({
@@ -11,7 +11,7 @@ import { ShippingService } from './services/shipping';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
-  private readonly shippingService = inject(ShippingService);
+  protected readonly shippingService = inject(ShippingService);
   readonly shippingMethods = this.shippingService.getShippingMethods();
 
   protected shippingMethod = linkedSignal<ShippingMethod[], ShippingMethod>({
@@ -65,7 +65,7 @@ export class App {
       });
   }
 
-  changeShippingOptions() {
-    this.shippingService.updateShippingMethodIndex();
+  changeShippingOptions(timezone: Timezones) {
+    this.shippingService.updateShippingMethodIndex(timezone);
   }
 }
