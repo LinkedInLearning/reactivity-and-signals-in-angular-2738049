@@ -1,16 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { ShippingHttp } from './shipping-http';
 import { BehaviorSubject, switchMap } from 'rxjs';
+import { ALL_TIMEZONES, EASTERN, Timezones } from './shipping-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShippingService {
     private readonly ShippingHttpService = inject(ShippingHttp);
-    readonly shippingMethodIndex = new BehaviorSubject<number>(0);
+    readonly shippingMethodIndex = new BehaviorSubject<Timezones>(EASTERN);
 
-    updateShippingMethodIndex() {
-        this.shippingMethodIndex.next((this.shippingMethodIndex.value + 1) % 4);
+    updateShippingMethodIndex(timezone: Timezones) {
+        this.shippingMethodIndex.next(timezone);
     }
 
     getShippingMethods() {
