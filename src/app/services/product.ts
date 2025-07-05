@@ -1,18 +1,20 @@
-import { HttpClient } from '@angular/common/http';
+import { httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Item } from './product-data';
+import { ActivatedRoute } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Product {
-  private readonly httpClient = inject(HttpClient);
+  private readonly route = inject(ActivatedRoute);
 
-  getProducts() {
-    return this.httpClient.get<Item[]>(`api/items`)
-  }
+  readonly productId = toSignal(this.route.queryParamMap.pipe(
+    map(params => params.get('productId'))), { initialValue: '' });
 
-  getProductById(id: string) {
-    return this.httpClient.get<Item>(`api/items/${id}`)
-  }
+  readonly products = httpResource<Item[]>(() => `api/items`);
+
+  readonly selectedProduct = httpResource<Item>(() => `api/items/${this.productId()}`);
 }
