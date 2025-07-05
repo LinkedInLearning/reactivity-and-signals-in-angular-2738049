@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, effect, inject, viewChildren } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, ViewChildren, QueryList } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ProductCard } from '../product-card/product-card';
 import { CartService } from '../services/cart';
@@ -14,9 +14,13 @@ export class AllProducts {
   protected readonly cartService = inject(CartService);
   readonly products = toSignal(this.cartService.productsPlusQuantity, { initialValue: [] });
 
-  readonly cards = viewChildren(ProductCard);
+  @ViewChildren(ProductCard) cards!: QueryList<ProductCard>;
 
-  logCards = effect(() => {
-    console.log('Cards:', this.cards().length);
-  })
+  ngOnInit(): void {
+    console.log('Cards On Init:', this.cards);  
+  }  
+
+  ngAfterViewInit(): void {
+    console.log('Cards After Init:', this.cards);  
+  }
 }
