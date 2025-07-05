@@ -68,8 +68,22 @@ export class CartService {
       shipping: this.shippingService.shippingMethod()?.price || 0,
       total: +(subtotal + (subtotal * 0.07) + (this.shippingService.shippingMethod()?.price || 0)).toFixed(2)
     };
-  })
+  });
 
+  readonly productsInCartWithQuantity$ = this.cartItems$.pipe(
+    switchMap(cartItems =>
+      this.products$.pipe(
+        map(products =>
+          products
+            .filter(product => cartItems[product.id]?.quantity > 0)
+            .map(product => ({
+              ...product,
+              quantity: cartItems[product.id].quantity
+            }))
+        )
+      )
+    )
+  );
 
   addItemToCart(itemId: string) {
     const existingCart = this.cartItems.getValue();
@@ -97,19 +111,4 @@ export class CartService {
       this.cartItems.next(existingCart);
     }
   }
-
-  readonly productsInCartWithQuantity$ = this.cartItems$.pipe(
-    switchMap(cartItems =>
-      this.products$.pipe(
-        map(products =>
-          products
-            .filter(product => cartItems[product.id]?.quantity > 0)
-            .map(product => ({
-              ...product,
-              quantity: cartItems[product.id].quantity
-            }))
-        )
-      )
-    )
-  );
 }
