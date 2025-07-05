@@ -13,7 +13,7 @@
     @for(item of cartItems(); track item.id) {
       <tr>
         <td><button (click)="cartService.removeItemFromCart(item.id)">-</button> Adjust Totals <button (click)="cartService.addItemToCart(item.id)">+</button></td>
-        <td><img [src]="item.imageThumbnail" width="50" height="50"/></td>
+        <td><img [src]="item.imageThumbnail" width="50" height="50" alt=""/></td>
         <td>{{ item.name }}</td>
         <td>{{ item.quantity }}</td>
         <td>{{ item.price | currency }}</td>

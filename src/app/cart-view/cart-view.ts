@@ -3,9 +3,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import {toSignal} from '@angular/core/rxjs-interop';
 import { CartService } from '../services/cart';
-import { Product } from '../services/product';
 import { ShippingService } from '../services/shipping';
-import { ShippingMethod, Timezones } from '../services/shipping-data';
 import { TimezoneSelector } from '../timezone-selector/timezone-selector';
 
 @Component({

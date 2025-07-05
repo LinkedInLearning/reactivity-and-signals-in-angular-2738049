@@ -15,7 +15,7 @@ export class CartService {
 
   private readonly shippingService = inject(ShippingService);
 
-  private cartItems = new BehaviorSubject<{[key: string]: { quantity: number }}>({});
+  private cartItems = new BehaviorSubject<Record<string, { quantity: number }>>({});
   readonly cartItems$ = this.cartItems.asObservable();
   readonly cartItemsSignal = toSignal(this.cartItems.asObservable(), { requireSync: true });
 
@@ -93,8 +93,8 @@ export class CartService {
         }
       });
     } else if (currentQuantity === 1) {
-      const { [itemId]: _, ...rest } = existingCart;
-      this.cartItems.next(rest);
+      delete existingCart[itemId];
+      this.cartItems.next(existingCart);
     }
   }
 
