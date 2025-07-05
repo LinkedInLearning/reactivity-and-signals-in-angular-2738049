@@ -10,16 +10,18 @@ import { CartService } from '../services/cart';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailView {
-  @Input() set productId(val: string) {
-    this.id.set(val);
-  }
+  @Input() productId: string = '';
 
-  readonly id = signal<string>('');
+  // We could make the decorator based input reactive by using a setter and a signal.
+  // @Input() set productId(val: string) {
+  //   this.id.set(val);
+  // }
+  // readonly id = signal<string>('');
 
   protected readonly cartService = inject(CartService);
 
   protected readonly selectedProduct = rxResource({
-    params: () => ({ id: this.id() }),
+    params: () => ({ id: this.productId }),
     stream: ({params}) => this.cartService.getProductById(params.id),
   });
 
