@@ -11,10 +11,10 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './product-card.scss'
 })
 export class ProductCard {
-  product = input.required<Item>();
+  readonly product = input.required<Item>();
   protected readonly cartService = inject(CartService);
 
-  kudos = contentChildren('kudos');
+  readonly kudos = contentChildren('kudos');
 
   logKudos = effect(() => {
     console.log('Kudos:', this.kudos().length);
