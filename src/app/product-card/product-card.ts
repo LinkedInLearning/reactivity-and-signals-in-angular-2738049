@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, contentChildren, effect, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, contentChildren, effect, inject, input } from '@angular/core';
 import { Item } from '../services/product-data';
 import { CartService } from '../services/cart';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -12,7 +12,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductCard {
-  @Input({required: true}) product!: Item;
+  readonly product = input.required<Item>();
   protected readonly cartService = inject(CartService);
 
   readonly kudos = contentChildren('kudos');
