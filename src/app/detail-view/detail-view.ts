@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, Input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CartService } from '../services/cart';
 
