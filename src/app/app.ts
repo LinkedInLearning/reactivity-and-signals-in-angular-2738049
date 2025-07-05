@@ -10,4 +10,5 @@ import { SideNav } from './side-nav/side-nav';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
+  userName = "Guest";
 }
