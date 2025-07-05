@@ -12,7 +12,7 @@
         </div>
         <div class="detail-info">
           <div class="product-description">{{ selected.description }}</div>
-          <div class="product-quantity">Quantity: {{ selected.quantity }}</div>
+          <div class="product-quantity">Quantity: {{ quantity() }}</div>
           <div class="product-price">Price: {{ selected.price }}</div>
           <button class="add-to-cart-btn" (click)="cartService.addItemToCart(selected.id)">
             Add to Cart

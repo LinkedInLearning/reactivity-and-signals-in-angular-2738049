@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, model } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Product } from '../services/product';
 
 @Component({
@@ -12,7 +11,7 @@ import { Product } from '../services/product';
 })
 export class SideNav {
   protected readonly productService = inject(Product);
-  readonly products = toSignal(this.productService.getProducts(), { initialValue: [] });
+  readonly products = this.productService.products.value;
 
   readonly user = model<string>('');
 
