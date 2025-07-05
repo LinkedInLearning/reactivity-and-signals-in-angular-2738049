@@ -1,0 +1,11 @@
+<div class="products-grid">
+  @for(product of products(); track product.id) {
+    <app-product-card [product]="product">
+      @if(product.quantity > 0) {
+        <p class="encourage">Great Choice!</p>
+      }
+    </app-product-card>
+  } @empty {
+    <p>Loading products...</p>
+  }
+</div>

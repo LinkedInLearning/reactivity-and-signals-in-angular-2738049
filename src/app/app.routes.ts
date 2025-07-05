@@ -3,8 +3,13 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'cart',
+        redirectTo: 'home',
         pathMatch: 'full'
+    },
+    {
+        path: 'home',
+        loadComponent: () => import('./all-products/all-products').then(m => m.AllProducts)
+
     },
     {
         path: 'cart',
