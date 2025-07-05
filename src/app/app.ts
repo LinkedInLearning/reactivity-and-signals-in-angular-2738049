@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 interface ShippingMethod {
   name: string;
@@ -10,7 +10,8 @@ interface ShippingMethod {
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
-  imports: [CurrencyPipe]
+  imports: [CurrencyPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
   protected shippingMethods: ShippingMethod[] = [
