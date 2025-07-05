@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CartService } from '../services/cart';
 
@@ -10,12 +10,15 @@ import { CartService } from '../services/cart';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailView {
-  readonly productId = input<string>('');
+  @Input() set productId(val: string) {
+    this.id.set(val);
+  }
+  readonly id = signal<string>('');
 
   protected readonly cartService = inject(CartService);
 
   protected readonly selectedProduct = rxResource({
-    params: () => ({ id: this.productId() }),
+    params: () => ({ id: this.id() }),
     stream: ({params}) => this.cartService.getProductById(params.id),
   });
 
