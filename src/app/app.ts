@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SideNav } from './side-nav/side-nav';
 
@@ -11,4 +11,6 @@ import { SideNav } from './side-nav/side-nav';
 })
 export class App {
   userName = "Guest";
+  // The parent property can be a signal or a plain object
+  // userName = signal<string>("Guest");
 }
