@@ -12,4 +12,14 @@
   <div class="side-nav-bottom">
     <a [routerLink]="['/cart']" routerLinkActive="active">View Cart</a>
   </div>
+  <div class="side-nav-bottom">
+    <p>Enter Your Name for a Personalized Experience</p>
+    <input 
+      #userInput 
+      type="text" 
+      [value]="user" 
+      placeholder="Enter your name" 
+      (keyup)="updateName(userInput.value)"
+    />
+  </div>
 </nav>
