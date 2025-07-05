@@ -1,8 +1,10 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ShippingMethod, Timezones } from './services/shipping-data';
 import { ShippingService } from './services/shipping';
 import {toSignal} from '@angular/core/rxjs-interop';
+import { Product } from './services/product';
+import { CartService } from './services/cart';
 
 @Component({
   selector: 'app-root',
@@ -13,57 +15,18 @@ import {toSignal} from '@angular/core/rxjs-interop';
 })
 export class App {
   protected readonly shippingService = inject(ShippingService);
-  readonly shippingMethods = toSignal(this.shippingService.getShippingMethods(), { initialValue: [] });
+  protected readonly productService = inject(Product);
+  protected readonly cartService = inject(CartService);
 
-  protected shippingMethod = linkedSignal<ShippingMethod[], ShippingMethod>({
-    source: this.shippingMethods,
-    computation: (newOptions, previous) => {
-      if(newOptions.length) {
-        const selected = newOptions.find((opt) => opt.name === previous?.value.name);
-        if (selected && selected.price !== previous?.value.price) {
-          selected.hasPriceChange = true;
-        }
-        return (
-          selected ?? newOptions[0]
-        );
-      }
-      return { name: '', price: 0, hasPriceChange: false };
-    },
-  });
+  readonly shippingMethods = this.shippingService.shippingMethods;
+  readonly cartItems = toSignal(this.cartService.productsPlusQuantity, { initialValue: [] });
 
-  protected quantity = signal<number>(0);
-  
-  protected item = {
-    name: 'Super Cool Item',
-    price: 19.99
-  };
-
-  protected itemTotal = computed<number>(() => {
-    return +(this.quantity() * this.item.price).toFixed(2);
-  });
-  
-  
-  protected subtotal = computed(() => this.itemTotal());
-  protected tax = computed(() => +(this.subtotal() * 0.07).toFixed(2));
-  protected shipping = computed(() => this.shippingMethod()?.price || 0);
-  protected total = computed(() => +(this.subtotal() + this.tax() + this.shipping()).toFixed(2));
-
-  constructor() {
-    effect(() => {
-      console.log(`Quantity: ${this.quantity()}`);
-    })
-  }
-
-
-  addToCart() {
-    this.quantity.update(previous => previous + 1);
+  addToCart(id: string) {
+    this.cartService.addItemToCart(id);
   }
 
   updateShippingMethod(method: ShippingMethod) {
-    this.shippingMethod.set({
-        ...method,
-        hasPriceChange: false
-      });
+    this.shippingService.shippingMethod.set(method);
   }
 
   changeShippingOptions(timezone: Timezones) {
