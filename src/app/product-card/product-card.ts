@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, contentChildren, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, contentChildren, effect, inject, input } from '@angular/core';
 import { Item } from '../services/product-data';
 import { CartService } from '../services/cart';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -8,7 +8,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   selector: 'app-product-card',
   imports: [CurrencyPipe, RouterLink, RouterLinkActive],
   templateUrl: './product-card.html',
-  styleUrl: './product-card.scss'
+  styleUrl: './product-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductCard {
   readonly product = input.required<Item>();
