@@ -13,7 +13,7 @@ export class AllProducts {
   protected readonly cartService = inject(CartService);
   readonly products = toSignal(this.cartService.productsPlusQuantity, { initialValue: [] });
 
-  cards = viewChildren(ProductCard);
+  readonly cards = viewChildren(ProductCard);
 
   logCards = effect(() => {
     console.log('Cards:', this.cards().length);
