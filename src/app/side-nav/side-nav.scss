@@ -45,15 +45,10 @@
 
 .side-nav a {
   color: #1976d2;
-  text-decoration: none;
   cursor: pointer;
   font-weight: 500;
   transition: color 0.2s;
   padding: 8px;
-  &:hover {
-    color: #0d47a1;
-    text-decoration: underline;
-  }
   &.active {
     font-weight: bold;
     color: #0d0000;
@@ -65,11 +60,4 @@
 .side-nav a:hover {
   color: #0d47a1;
   text-decoration: underline;
-}
-
-.active {
-  font-weight: bold;
-  color: #0d0000;
-  background-color: #fff;
-  border-radius: 4px;
 }

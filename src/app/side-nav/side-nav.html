@@ -1,5 +1,5 @@
 <nav class="side-nav">
-  <h2>Products</h2>
+  <h2><a [routerLink]="['/home']" routerLinkActive="active">Products</a></h2>
   <ul>
     @for(product of products(); track product.id) {
       <li>
@@ -17,7 +17,7 @@
     <input 
       #userInput 
       type="text" 
-      [value]="user" 
+      [value]="user()" 
       placeholder="Enter your name" 
       (keyup)="updateName(userInput.value)"
     />
