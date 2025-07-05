@@ -1,9 +1,9 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
-import { delay, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Product } from './product';
 import { ShippingService } from './shipping';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +34,22 @@ export class CartService {
       );
     })
   );
+
+  getProductById(id: string) {
+    return this.cartItems$.pipe(
+      switchMap((cartItems) => {
+        return this.productService.getProductById(id).pipe(
+          map((product) => {
+              const itemInCart = cartItems[product.id];
+              return {
+                ...product,
+                quantity: itemInCart ? itemInCart.quantity : 0
+              };
+          })
+        );
+      })
+    )
+  }
 
   readonly cartTotals = computed(() => {
     const subtotal = Object.keys(this.cartItemsSignal()).reduce((acc, key) => {

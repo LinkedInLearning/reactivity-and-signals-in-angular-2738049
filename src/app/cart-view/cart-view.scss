@@ -1,0 +1,48 @@
+h1 {
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+table {
+    margin: 0 auto;
+    width: 90%;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    padding: 10px 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+    &:last-of-type {
+        min-width: 300px;
+    }
+  }
+  thead {
+    background-color: #f4f4f4;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+  tfoot{
+    background-color: #f4f4f4;
+    tr:last-of-type{
+      font-weight: bold;
+      background-color: #ceecfc;
+    }
+  }
+  
+  button {
+      margin: 5px;
+      padding: 5px;
+  }
+  
+  .shipping-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+  }
+  .warning {
+      color: red;
+      font-weight: bold;
+  }
+  
