@@ -15,7 +15,7 @@
     "emmet.triggerExpansionOnTab": true,
     "files.autoSave": "afterDelay",
     "terminal.integrated.fontSize": 18,
-    "workbench.colorTheme": "LinkedIn Learning Dark",
+    "workbench.colorTheme": "Default Dark Modern",
     "workbench.fontAliasing": "antialiased",
     "workbench.statusBar.visible": true
   }
