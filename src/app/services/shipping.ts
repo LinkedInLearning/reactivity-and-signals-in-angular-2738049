@@ -1,18 +1,16 @@
-import { inject, Injectable, linkedSignal, signal } from '@angular/core';
+import { Injectable, linkedSignal, signal } from '@angular/core';
 import { EASTERN, ShippingConfig, ShippingMethod, Timezones } from './shipping-data';
-import { HttpClient } from '@angular/common/http';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { httpResource } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShippingService {
-    private readonly http = inject(HttpClient);
     readonly shippingMethodIndex = signal<Timezones>(EASTERN);
-    readonly shippingMethods = toSignal(this.http.get<ShippingConfig>(`api/shipping/${this.shippingMethodIndex()}`));
+    readonly shippingMethods = httpResource<ShippingConfig>(() => `api/shipping/${this.shippingMethodIndex()}`);
 
     readonly shippingMethod = linkedSignal<ShippingConfig | undefined, ShippingMethod | undefined>({
-        source: this.shippingMethods,
+        source: this.shippingMethods.value,
         computation: (newOptions, previous) => {
             if (!newOptions) {
                 return undefined;
