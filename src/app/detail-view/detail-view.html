@@ -1,4 +1,6 @@
-@let selected = selectedProduct; 
+@let selected = selectedProduct.value(); 
+@let loading = selectedProduct.isLoading();
+@let error = selectedProduct.error();
 
 <div class="detail-view">
   <div class="detail-card">
@@ -17,8 +19,10 @@
           </button>
         </div>
       </div>
-    } @else{
-      <h2 class="product-name">No Product Selected</h2>
+    } @else if(loading) {
+      <h2 class="product-name">Product Loading...</h2>
+    } @else if(error){
+      <h2 class="product-name">Oops! Something went wrong</h2>
     }
   </div>
 </div>
