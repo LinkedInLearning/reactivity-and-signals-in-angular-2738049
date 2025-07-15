@@ -20,6 +20,7 @@ export class App {
     {name: 'Speedy Shipping', price: 15.00},
     {name: 'Overnight Shipping', price: 25.00}
   ]);
+
   protected shippingMethod = linkedSignal<ShippingMethod[], ShippingMethod>({
     source: this.shippingMethods,
     computation: (newOptions, previous) => {
