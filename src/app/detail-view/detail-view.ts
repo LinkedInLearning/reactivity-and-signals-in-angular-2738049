@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { CartService } from '../services/cart';
-import { ITEMS } from '../services/product-data';
 
 @Component({
   selector: 'app-detail-view',
@@ -18,11 +17,11 @@ export class DetailView {
   readonly id = signal<string>('');
 
   protected readonly cartService = inject(CartService);
-  // Hardcoded for demo purposes
-  protected readonly selectedProduct = ITEMS[0];
-  
-  // TODO: use RxResource to make this reactive
-  // toSignal(this.cartService.getProductById(this.id()));
+
+  protected readonly selectedProduct = rxResource({
+    params: () => ({ id: this.id() }),
+    stream: ({params}) => this.cartService.getProductById(params.id),
+  });
 
   addToCart(id: string) {
     this.cartService.addItemToCart(id);
