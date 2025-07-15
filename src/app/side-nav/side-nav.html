@@ -1,0 +1,15 @@
+<nav class="side-nav">
+  <h2>Products</h2>
+  <ul>
+    @for(product of products(); track product.id) {
+      <li>
+        <a [routerLink]="['/detail']" [queryParams]="{ productId: product.id }" routerLinkActive="active">{{ product.name }}</a>
+      </li>
+    } @empty {
+      <li>Loading...</li>
+    }
+  </ul>
+  <div class="side-nav-bottom">
+    <a [routerLink]="['/cart']" routerLinkActive="active">View Cart</a>
+  </div>
+</nav>
