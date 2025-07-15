@@ -1,7 +1,9 @@
 <div class="app-container">
-  <div class="header">The Best Shopping Experience</div>
+  <div class="header">The Best Shopping Experience for {{ userName }}</div>
   <div class="content-row">
-    <app-side-nav></app-side-nav>
+    <app-side-nav
+      [(user)]="userName"
+    ></app-side-nav>
     <div class="main-content">
       <router-outlet/>
     </div>
