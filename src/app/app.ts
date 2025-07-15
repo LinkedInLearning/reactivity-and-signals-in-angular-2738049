@@ -19,6 +19,7 @@ export class App {
   protected readonly cartService = inject(CartService);
 
   readonly shippingMethods = this.shippingService.shippingMethods.value;
+
   readonly cartItems = toSignal(this.cartService.productsPlusQuantity, { initialValue: [] });
 
   addToCart(id: string) {
