@@ -40,8 +40,7 @@ export class App {
   protected itemTotal = computed<number>(() => {
     return +(this.quantity() * this.item.price).toFixed(2);
   });
-  
-  
+
   protected subtotal = computed(() => this.itemTotal());
   protected tax = computed(() => +(this.subtotal() * 0.07).toFixed(2));
   protected shipping = computed(() => this.shippingMethod()?.price || 0);
@@ -52,7 +51,6 @@ export class App {
       console.log(`Quantity: ${this.quantity()}`);
     })
   }
-
 
   addToCart() {
     this.quantity.update(previous => previous + 1);
