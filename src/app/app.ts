@@ -2,6 +2,7 @@ import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
 import { ShippingMethod, Timezones } from './services/shipping-data';
 import { ShippingService } from './services/shipping';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ import { ShippingService } from './services/shipping';
 })
 export class App {
   protected readonly shippingService = inject(ShippingService);
-  readonly shippingMethods = this.shippingService.getShippingMethods();
+
+  readonly shippingMethods = toSignal(this.shippingService.getShippingMethods(), { initialValue: [] });
 
   protected shippingMethod = linkedSignal<ShippingMethod[], ShippingMethod>({
     source: this.shippingMethods,
