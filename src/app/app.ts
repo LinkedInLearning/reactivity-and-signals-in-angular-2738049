@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
 import { ShippingMethod, Timezones } from './services/shipping-data';
 import { ShippingService } from './services/shipping';
@@ -7,7 +7,7 @@ import { ShippingService } from './services/shipping';
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
