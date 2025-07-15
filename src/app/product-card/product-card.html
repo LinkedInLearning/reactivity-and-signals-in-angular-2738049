@@ -1,17 +1,17 @@
 <div class="product-card">
   <img
-    [src]="product().imageThumbnail"
-    alt="{{ product().name }}"
+    [src]="product.imageThumbnail"
+    alt="{{ product.name }}"
     class="product-image"
   />
   <div>
-    <h3 class="product-title"><a [routerLink]="['/detail']" [queryParams]="{ productId: product().id }" routerLinkActive="active">{{ product().name }}</a>
+    <h3 class="product-title"><a [routerLink]="['/detail']" [queryParams]="{ productId: product.id }" routerLinkActive="active">{{ product.name }}</a>
     </h3>
     <ng-content/>
-    <p>Quantity: {{ product().quantity }}</p>
-    <div class="product-price">{{ product().price | currency }}</div>
+    <p>Quantity: {{ product.quantity }}</p>
+    <div class="product-price">{{ product.price | currency }}</div>
   </div>
-  <button class="add-to-cart-btn" (click)="cartService.addItemToCart(product().id)">
+  <button class="add-to-cart-btn" (click)="cartService.addItemToCart(product.id)">
     Add to Cart
   </button>
 </div>
