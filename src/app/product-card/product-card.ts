@@ -13,6 +13,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class ProductCard {
   readonly product = input.required<Item>();
+
   protected readonly cartService = inject(CartService);
 
   readonly kudos = contentChildren('kudos');
