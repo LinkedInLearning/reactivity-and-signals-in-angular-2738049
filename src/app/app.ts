@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, linkedSignal, signal } from '@angular/core';
 
 interface ShippingMethod {
   name: string;
@@ -20,7 +20,19 @@ export class App {
     {name: 'Speedy Shipping', price: 15.00},
     {name: 'Overnight Shipping', price: 25.00}
   ]);
-  protected shippingMethod = signal<ShippingMethod>(this.shippingMethods()[0]);
+
+  protected shippingMethod = linkedSignal<ShippingMethod[], ShippingMethod>({
+    source: this.shippingMethods,
+    computation: (newOptions, previous) => {
+      const selected = newOptions.find((opt) => opt.name === previous?.value.name);
+      if (selected && selected.price !== previous?.value.price) {
+        selected.hasPriceChange = true;
+      }
+      return (
+        selected ?? newOptions[0]
+      );
+    },
+  });
 
   protected quantity = signal<number>(0);
   
@@ -32,8 +44,7 @@ export class App {
   protected itemTotal = computed<number>(() => {
     return +(this.quantity() * this.item.price).toFixed(2);
   });
-  
-  
+ 
   protected subtotal = computed(() => this.itemTotal());
   protected tax = computed(() => +(this.subtotal() * 0.07).toFixed(2));
   protected shipping = computed(() => this.shippingMethod()?.price || 0);
@@ -45,13 +56,15 @@ export class App {
     })
   }
 
-
   addToCart() {
     this.quantity.update(previous => previous + 1);
   }
 
   updateShippingMethod(method: ShippingMethod) {
-    this.shippingMethod.set(method);
+    this.shippingMethod.set({
+        ...method,
+        hasPriceChange: false
+      });
   }
 
   changeShippingOptions() {
