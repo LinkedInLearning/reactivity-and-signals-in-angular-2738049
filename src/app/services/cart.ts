@@ -1,9 +1,8 @@
-import { computed, inject, Injectable } from '@angular/core';
-import { BehaviorSubject, of } from 'rxjs';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { map, switchMap } from 'rxjs/operators';
 import { Product } from './product';
 import { ShippingService } from './shipping';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -15,25 +14,20 @@ export class CartService {
 
   private readonly shippingService = inject(ShippingService);
 
-  private cartItems = new BehaviorSubject<Record<string, { quantity: number }>>({});
-  readonly cartItems$ = this.cartItems.asObservable();
-  readonly cartItemsSignal = toSignal(this.cartItems.asObservable(), { requireSync: true });
+  readonly cartItems = signal<Record<string, { quantity: number }>>({});
+  readonly cartItems$ = toObservable(this.cartItems);
 
-  readonly productsPlusQuantity = this.cartItems$.pipe(
-    switchMap((cartItems) => {
-      return this.products$.pipe(
-        switchMap((products) => {
-          return  of(products.map(product => {
-            const itemInCart = cartItems[product.id];
-            return {
-              ...product,
-              quantity: itemInCart ? itemInCart.quantity : 0
-            };
-          }));
-        })
-      );
-    })
-  );
+  readonly productsPlusQuantity = computed(() => {
+    const cartItems = this.cartItems();
+    const products = this.productsSignal();
+    return products.map(product => {
+      const itemInCart = cartItems[product.id];
+      return {
+        ...product,
+        quantity: itemInCart ? itemInCart.quantity : 0
+      };
+    });
+  });
 
   getProductById(id: string) {
     return this.cartItems$.pipe(
@@ -52,11 +46,11 @@ export class CartService {
   }
 
   readonly cartTotals = computed(() => {
-    const subtotal = Object.keys(this.cartItemsSignal()).reduce((acc, key) => {
+    const subtotal = Object.keys(this.cartItems()).reduce((acc, key) => {
       const product = this.productsSignal().find((product) => product.id === key);
 
       if(product) {
-        return acc + ((this.cartItemsSignal()[key]?.quantity || 0) * product.price);
+        return acc + ((this.cartItems()[key]?.quantity || 0) * product.price);
       }
 
       return acc;
@@ -70,37 +64,31 @@ export class CartService {
     };
   });
 
-  readonly productsInCartWithQuantity$ = this.cartItems$.pipe(
-    switchMap(cartItems =>
-      this.products$.pipe(
-        map(products =>
-          products
-            .filter(product => cartItems[product.id]?.quantity > 0)
-            .map(product => ({
-              ...product,
-              quantity: cartItems[product.id].quantity
-            }))
-        )
-      )
-    )
-  );
+  readonly productsInCartWithQuantity = computed(() => {
+    return this.productsSignal()
+    .filter(product => this.cartItems()[product.id]?.quantity > 0)
+    .map(product => ({
+      ...product,
+      quantity: this.cartItems()[product.id].quantity
+    }))
+  });
 
   addItemToCart(itemId: string) {
-    const existingCart = this.cartItems.getValue();
+    const existingCart = this.cartItems();
     const currentQuantity = existingCart[itemId]?.quantity || 0;
-    this.cartItems.next({ 
+    this.cartItems.set({
       ...existingCart,
       [itemId]: {
-        quantity: currentQuantity + 1 // Increment quantity by 1        
+        quantity: currentQuantity + 1
       }
     });
   }
 
   removeItemFromCart(itemId: string) {
-    const existingCart = this.cartItems.getValue();
+    const existingCart = this.cartItems();
     const currentQuantity = existingCart[itemId]?.quantity || 0;
     if (currentQuantity > 1) {
-      this.cartItems.next({
+      this.cartItems.set({
         ...existingCart,
         [itemId]: {
           quantity: currentQuantity - 1
@@ -108,8 +96,7 @@ export class CartService {
       });
     } else if (currentQuantity === 1) {
       delete existingCart[itemId];
-      this.cartItems.next(existingCart);
+      this.cartItems.set({ ...existingCart });
     }
   }
-
 }
