@@ -15,7 +15,7 @@ export class CartService {
 
   private readonly shippingService = inject(ShippingService);
 
-  private cartItems = new BehaviorSubject<{[key: string]: { quantity: number }}>({});
+  private cartItems = new BehaviorSubject<Record<string, { quantity: number }>>({});
   readonly cartItems$ = this.cartItems.asObservable();
   readonly cartItemsSignal = toSignal(this.cartItems.asObservable(), { requireSync: true });
 
@@ -81,4 +81,35 @@ export class CartService {
       }
     });
   }
+
+  removeItemFromCart(itemId: string) {
+    const existingCart = this.cartItems.getValue();
+    const currentQuantity = existingCart[itemId]?.quantity || 0;
+    if (currentQuantity > 1) {
+      this.cartItems.next({
+        ...existingCart,
+        [itemId]: {
+          quantity: currentQuantity - 1
+        }
+      });
+    } else if (currentQuantity === 1) {
+      delete existingCart[itemId];
+      this.cartItems.next(existingCart);
+    }
+  }
+
+  readonly productsInCartWithQuantity$ = this.cartItems$.pipe(
+    switchMap(cartItems =>
+      this.products$.pipe(
+        map(products =>
+          products
+            .filter(product => cartItems[product.id]?.quantity > 0)
+            .map(product => ({
+              ...product,
+              quantity: cartItems[product.id].quantity
+            }))
+        )
+      )
+    )
+  );
 }

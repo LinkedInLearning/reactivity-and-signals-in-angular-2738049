@@ -12,44 +12,30 @@
   <tbody>
     @for(item of cartItems(); track item.id) {
       <tr>
-        <td><button (click)="addToCart(item.id)">Add {{item.name}} to Cart</button></td>
-        <td><img [src]="item.imageThumbnail" width="50" height="50"/></td>
+        <td><button (click)="cartService.removeItemFromCart(item.id)">-</button> Adjust Totals <button (click)="cartService.addItemToCart(item.id)">+</button></td>
+        <td><img [src]="item.imageThumbnail" width="50" height="50" alt=""/></td>
         <td>{{ item.name }}</td>
         <td>{{ item.quantity }}</td>
         <td>{{ item.price | currency }}</td>
         <td>{{ (item.price * item.quantity) | currency  }}</td>
       </tr>
+    } @empty() {
+      <tr>
+        <td colspan="6">Your cart is empty - <button (click)="cartService.addItemToCart('sci-1')">Add a Super Cool Item</button></td>
+      </tr>
     }
     <tr>
         <td colspan="5">
-            <p>Shipping Method - Select Time Zone for Shipping Costs</p>
-            <div class="shipping-methods">
-              <div>
-                <input type="radio" id="eastern" name="timezone" value ="timezone" (click)="changeShippingOptions('eastern')" checked/>
-                <label for="i">Eastern Time Zone</label>
-              </div>
-              <div>
-                <input type="radio" id="central" name="timezone" value ="timezone" (click)="changeShippingOptions('central')" />
-                <label for="i">Central Time Zone</label>
-              </div>
-              <div>
-                <input type="radio" id="mountain" name="timezone" value ="timezone" (click)="changeShippingOptions('mountain')" />
-                <label for="i">Mountain Time Zone</label>
-              </div>
-              <div>
-                <input type="radio" id="pacific" name="timezone" value ="timezone" (click)="changeShippingOptions('pacific')" />
-                <label for="i">Pacific Time Zone</label>
-              </div>
-            </div>
+          <app-timezone-selector/>
         </td>
         <td>
             <div class="shipping-methods">
-            @for(method of shippingMethods()?.options; track method.name) {
+            @for(method of shippingService.shippingMethods.value()?.options; track method.name) {
                 <div>
                     <input 
                       type="radio" id="i" name="shippingMethod" 
                       value="shippingMethod" 
-                      (click)="updateShippingMethod(method)" 
+                      (click)="shippingService.shippingMethod.set(method)" 
                       [checked]="method.name === shippingService.shippingMethod()?.name"
                     />
                     <label for="i">{{ method.name}} -  {{method.price | currency}}</label>
