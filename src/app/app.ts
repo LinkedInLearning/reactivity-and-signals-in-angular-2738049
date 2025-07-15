@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@a
 interface ShippingMethod {
   name: string;
   price: number;
+  hasPriceChange?: boolean
 }
 
 @Component({
@@ -14,12 +15,12 @@ interface ShippingMethod {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
-  protected shippingMethods: ShippingMethod[] = [
+  protected shippingMethods = signal([
     {name: 'Standard Shipping', price: 5.00},
     {name: 'Speedy Shipping', price: 15.00},
     {name: 'Overnight Shipping', price: 25.00}
-  ];
-  protected shippingMethod = signal<ShippingMethod>(this.shippingMethods[0]);
+  ]);
+  protected shippingMethod = signal<ShippingMethod>(this.shippingMethods()[0]);
 
   protected quantity = signal<number>(0);
   
@@ -51,5 +52,14 @@ export class App {
 
   updateShippingMethod(method: ShippingMethod) {
     this.shippingMethod.set(method);
+  }
+
+  changeShippingOptions() {
+    this.shippingMethods.set([
+      {name: 'Standard Shipping', price: 5.00},
+      {name: 'Quick Shipping', price: 10.00},
+      {name: 'Fast Shipping', price: 15.00},
+      {name: 'Overnight Shipping', price: 29.99},
+    ]);
   }
 }
