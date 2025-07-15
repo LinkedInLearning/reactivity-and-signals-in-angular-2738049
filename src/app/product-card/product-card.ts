@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, contentChildren, effect, inject, input } from '@angular/core';
 import { Item } from '../services/product-data';
 import { CartService } from '../services/cart';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -13,4 +13,10 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 export class ProductCard {
   product = input.required<Item>();
   protected readonly cartService = inject(CartService);
+
+  kudos = contentChildren('kudos');
+
+  logKudos = effect(() => {
+    console.log('Kudos:', this.kudos().length);
+  });
 }

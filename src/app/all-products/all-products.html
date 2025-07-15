@@ -2,7 +2,7 @@
   @for(product of products(); track product.id) {
     <app-product-card [product]="product">
       @if(product.quantity > 0) {
-        <p class="encourage">Great Choice!</p>
+        <p #kudos class="encourage">Great Choice!</p>
       }
     </app-product-card>
   } @empty {
