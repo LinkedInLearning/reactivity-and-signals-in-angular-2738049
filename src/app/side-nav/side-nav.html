@@ -17,7 +17,7 @@
     <input 
       #userInput 
       type="text" 
-      [value]="user" 
+      [value]="user()" 
       placeholder="Enter your name" 
       (keyup)="updateName(userInput.value)"
     />
