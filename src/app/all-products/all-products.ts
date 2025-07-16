@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, inject, viewChildren, effect } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { ProductCard } from '../product-card/product-card';
 import { CartService } from '../services/cart';
 
@@ -12,7 +11,7 @@ import { CartService } from '../services/cart';
 })
 export class AllProducts {
   protected readonly cartService = inject(CartService);
-  readonly products = toSignal(this.cartService.productsPlusQuantity, { initialValue: [] });
+  readonly products = this.cartService.productsPlusQuantity;
 
   readonly cards = viewChildren(ProductCard);
 

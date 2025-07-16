@@ -18,5 +18,5 @@ export class CartView {
   protected readonly cartService = inject(CartService);
 
   readonly shippingMethods = this.shippingService.shippingMethods.value;
-  readonly cartItems = toSignal(this.cartService.productsInCartWithQuantity$, { initialValue: [] });
+  readonly cartItems = this.cartService.productsInCartWithQuantity;
 }
