@@ -1,26 +1,21 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { map, switchMap } from 'rxjs/operators';
 import { Product } from './product';
 import { ShippingService } from './shipping';
-import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
   private readonly productService = inject(Product);
-  readonly products$ = this.productService.getProducts();
-  readonly productsSignal = toSignal(this.products$, { initialValue: [] });
+  readonly products = this.productService.products.value;
 
   private readonly shippingService = inject(ShippingService);
 
   readonly cartItems = signal<Record<string, { quantity: number }>>({});
-  readonly cartItems$ = toObservable(this.cartItems);
 
   readonly productsPlusQuantity = computed(() => {
     const cartItems = this.cartItems();
-    const products = this.productsSignal();
-    return products.map(product => {
+    return this.products()?.map(product => {
       const itemInCart = cartItems[product.id];
       return {
         ...product,
@@ -29,25 +24,17 @@ export class CartService {
     });
   });
 
-  getProductById(id: string) {
-    return this.cartItems$.pipe(
-      switchMap((cartItems) => {
-        return this.productService.getProductById(id).pipe(
-          map((product) => {
-              const itemInCart = cartItems[product.id];
-              return {
-                ...product,
-                quantity: itemInCart ? itemInCart.quantity : 0
-              };
-          })
-        );
-      })
-    )
-  }
+  readonly selectedProductQuantity = computed(() => {
+    const productId = this.productService.productId();
+    if(productId) {
+      return this.cartItems()[productId]?.quantity || 0;
+    }
+    return 0;
+  });
 
   readonly cartTotals = computed(() => {
     const subtotal = Object.keys(this.cartItems()).reduce((acc, key) => {
-      const product = this.productsSignal().find((product) => product.id === key);
+      const product = this.products()?.find((product) => product.id === key);
 
       if(product) {
         return acc + ((this.cartItems()[key]?.quantity || 0) * product.price);
@@ -65,8 +52,7 @@ export class CartService {
   });
 
   readonly productsInCartWithQuantity = computed(() => {
-    return this.productsSignal()
-    .filter(product => this.cartItems()[product.id]?.quantity > 0)
+    return this.products()?.filter(product => this.cartItems()[product.id]?.quantity > 0)
     .map(product => ({
       ...product,
       quantity: this.cartItems()[product.id].quantity
