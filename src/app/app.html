@@ -24,7 +24,7 @@
         </td>
         <td>
             <div class="shipping-methods">
-            @for(method of shippingMethods | async; let i = $index; track $index) {
+            @for(method of shippingMethods(); let i = $index; track $index) {
                 <div>
                     <input type="radio" id="i" name="shippingMethod" value="shippingMethod" (click)="updateShippingMethod(method)" [checked]="method === shippingMethod()"/>
                     <label for="i">{{ method.name}} -  {{method.price | currency}}</label>
