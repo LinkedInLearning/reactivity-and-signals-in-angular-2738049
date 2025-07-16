@@ -51,4 +51,4 @@ export const SHIPPING_METHODS_LIST: ShippingConfig[] = [
     {id: CENTRAL, options: SHIPPING_METHODS_CENTRAL},
     {id: MOUNTAIN, options: SHIPPING_METHODS_MOUNTAIN},
     {id: PACIFIC, options: SHIPPING_METHODS_PACIFIC}
-]
+];
